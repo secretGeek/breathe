@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>breathe in and hold and breathe out and hold</title>
+</head>
+<body>
+<style>
+body {
+	max-width:100%;
+	padding:2ch;
+	color:#222;
+	font-size:1.2em;
+	background-image: linear-gradient(-90deg, #CF77F3 0%, #009BFF 47%, #2AC9DB 100%);;
+}
+
+html, body {
+	height:100%;
+}
+
+h2 {
+	font-size:80pt; 
+	line-height:90%;
+	padding:0;
+	margin:0;
+	text-align:center;
+	color:rgba(100,100,100,0.3);
+}
+
+.selected {
+	background-color:yellow;
+	color:rgba(0,0,0,0.5);
+}
+
+button.selected {
+	color:rgba(0,0,0,1);
+}
+
+h2 {
+	transition: background-color 1s ease;
+}
+
+#step0.selected {
+	background-color:rgba(200, 0,0,0.5);
+}
+#step1.selected {
+	background-color:rgba(200,100,0,0.5);
+}
+#step2.selected {
+	background-color:rgba(200,100,0,0.5);
+}
+#step3.selected {
+	background-color:rgba(0,200,0,0.5);
+}
+h2#step0.selected > .progress > .bar {
+	background-color:rgba(100, 0,0,0.5);
+}
+h2#step1.selected > .progress > .bar {
+	background-color:rgba(100, 50,0,0.5);
+}
+h2#step2.selected > .progress > .bar {
+	background-color:rgba(100,100,0,0.5);
+}
+h2#step3.selected > .progress > .bar {
+	background-color:rgba(0,100,0,0.5);
+}
+
+button.slowness {
+	display:inline; 
+	width:calc(10% - 18px);
+	height:40px;
+	vertical-align:top;
+	margin:7px;
+}
+.button-bar {
+	padding:5px -10px;
+	text-align:center;
+	height:auto;
+}
+.progress {
+	text-align:center;
+	margin:0;
+	margin-bottom:10px;
+}
+.bar {
+	width: 1%;
+	height: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+h2 {
+	border-radius: 5px;
+}
+
+.progress {
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+h2.selected > .progress > .bar {
+	background-color: #4CAF50;
+	animation: zeroTo100 7s infinite;
+}
+
+h2.selected > .progress {
+	background:rgba(200,200,200,0.3);
+}
+
+@keyframes zeroTo100 {
+  from { width: 1%; }
+	to { width: 100%; }
+}
+</style>
+
+<div id='steps'>
+
+<h2 id='step0' onclick='switchTo(this, 0);'>breathe in<br/><div id="progress0" class='progress'>
+	<div id="bar0" class="bar"></div>
+</div></h2>
+<h2 id='step1' onclick='switchTo(this, 1);'>and hold<br/><div id="progress1" class='progress'>
+	<div id="bar1" class="bar"></div>
+</div></h2>
+<h2 id='step2' onclick='switchTo(this, 2);'>breathe out<br/><div id="progress" class='progress'>
+	<div id="bar2" class="bar"></div>
+</div></h2>
+<h2 id='step3' onclick='switchTo(this, 3);'>and hold<br/><div id="progress3" class='progress'>
+	<div id="bar3" class="bar"></div>
+</div></h2>
+
+</div>
+
+<div class='button-bar patterns'></div>
+
+
+</body>
+<script>
+
+
+// ## NAME
+//		 pattern:
+//		 recommended speed:
+//		 recommended total:
+
+// idea for husks/template-system convention: all words in capitals are to be REPLACED
+// (or `fred` <-- code words? `husk:INSTRUCTION` <-- in that format. so as long as things don't match that pattern we're safe.
+
+// "Equal breathing" -- 1 cycle = 10 seconds. ratios within cycle: equal in then out. 
+//		pattern: in-out
+//		recommended rate: 6 per minute
+//		recommended total: 10 minutes.
+// "Kapalabhati or 'Skull Shining Breath'" 
+//		pattern: long, slow inhale, followed by a quick, powerful exhale
+//		recommended rate: 30 to 60 per minute. one inhale-exhale (all through the nose) every one to two seconds -- 30 to 60 per minute.
+//		recommended total: 10 cycles.
+// "4-7-8"
+//		pattern: in for 4, hold for 7, out for 8.
+//		recommended rate: 3 per minute
+// "7-11"
+//		pattern: in for 7, out for 11.
+//		recommended rate: 3 per minute
+
+// "Roll breathing"
+// "Morning breathing"
+
+
+// Other: body scan.
+//		    belly breathing
+
+// Mantra patterns: 
+//	 thoughts or soft words that can be written/overlaid on any type of step --
+//	 these are secondary patterns that can be added on top. mat
+//	 some only on a long slow outbreath
+//	 some on in our out breath.
+//	 e.g.
+//		  I breathe in peace and calm
+//		  I breathe out stress and tension
+//
+
+// Colour scheme: Must be a dark mode and various tones --
+//	 Purple, dark greens, dark blues, dark orange, dark yellow etc.
+//
+// Automations: color schemes that change over time in accordance with functions/waves/oscillations.
+//
+
+//var delays = [700,800,700,800];
+//var slowness = 3;
+
+var currentPattern;
+
+function setPattern(o, pattern) {
+  removeClass(".slowness.pattern.selected", "selected");
+	
+  for(var p of patterns) {
+	  if (p.name === pattern) {
+			o.classList.add("selected");
+			applyPattern(p);
+		}
+	}
+}
+
+function applyPattern(pattern) {
+	//stop current one,.
+	clearTimeout(nextTimeOut);
+	removeClass("h2", "selected");
+	currentPattern = pattern;
+	var ticksPerLoop = 0;
+	for(var s of pattern.ticks) {
+		ticksPerLoop += s;
+	}
+	loopDuration = 60.0 / (pattern.rpm);
+	tickDuration = loopDuration / ticksPerLoop;
+	var i = 0;
+	clearSteps();
+	pattern.durations = [];
+	for(var name of pattern.names) {
+		duration = pattern.ticks[i];
+		pattern.durations.push(duration* tickDuration);
+		appendStep(i, name);
+		i++;
+	}
+	index = 0;
+	showAndContinue(index);
+}
+
+function clearSteps() {
+	removeAllBySelector('h2');
+}
+function appendStep(i, name) {
+    var parentDiv = $id('steps');
+	var html = "<h2 id='step" + i + "' onclick='switchTo(this, " + i + ");'>" + name + "<br/><div id='progress" + i + "' class='progress'><div id='bar" + i + "' class='bar'></div></div></h2>";
+	addChild(parentDiv, html);
+}
+	
+function switchTo(o, index) {
+	clearTimeout(nextTimeOut);
+	removeClass("h2", "selected");
+	showAndContinue(index);
+}
+
+function setSlowness(o, figure) {
+	removeClass(".slowness.selected", "selected");
+	o.classList.add("selected");
+	slowness = figure;
+}
+
+
+var nextTimeOut = "z";
+
+function showAndContinue(a) {
+	removeClass('h2', 'selected');
+	if (a >= currentPattern.ticks.length) {
+		a = 0;
+	}
+
+	addClass('#step' + a, 'selected');
+	var totalInterval = (currentPattern.durations[a]);
+
+	// select the relevant bar...
+	var elem = document.getElementById("bar" + a);
+	elem.style.animationDuration = "" + (totalInterval) + "s"; 
+
+	if (nextTimeOut != 'z') {
+		clearTimeout(nextTimeOut);
+	}
+	nextTimeOut = setTimeout(function(){ showAndContinue(a+1) }, totalInterval*1000);
+}
+
+function showPatternButton(parentDiv, pattern) {
+	var html = "<button class='slowness pattern' title='" + pattern.name + "' onclick='setPattern(this, \"" + pattern.name + "\");'>" + pattern.name + "</button>";
+	addChild(parentDiv, html);
+}
+
+function showPatternButtons(patterns) {
+	var parentDiv = $(".button-bar.patterns")[0];
+	for(var pattern of patterns) {
+		showPatternButton(parentDiv, pattern);
+	}
+}
+
+function start() {
+	a=0;
+	showPatternButtons(patterns);
+	setPattern($('button[title="equal"]')[0], "equal");
+	showAndContinue(0);
+}
+
+//#################################
+//   ###########################  
+//      #####################  
+//         ###############  
+//            #########  
+//               ###
+//#################################
+//########  utility       #########
+//########     functions  #########
+//########(good ones too!)#########
+//#################################
+
+function addChild(parent, html) {
+    parent.appendChild(htmlToElement(html));
+}
+
+function htmlToElement(html){
+  let template = document.createElement("template");
+  html = html.trim(); // Never return a text node of whitespace as the result
+  template.innerHTML = html;
+  return template.content.firstChild;
+}
+
+function isEmpty(obj) {
+	return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+// add the class of className to all elements that match the selector
+function addClass(selector, className) {
+	for (var _i = 0, _a = $(selector); _i < _a.length; _i++) {
+		var example = _a[_i];
+		example.classList.add(className);
+	}
+}
+
+// remove the class className from all elements that match the selector
+function removeClass(selector, className) {
+	for (var _i = 0, _a = $(selector); _i < _a.length; _i++) {
+		var example = _a[_i];
+		example.classList.remove(className);
+	}
+}
+
+// remove the class of className from all elements that have a class of className
+function removeAllClass(className) {
+	for (var _i = 0, _a = $("." + className); _i < _a.length; _i++) {
+		var element = _a[_i];
+		element.classList.remove(className);
+	}
+}
+
+//element.parentNode.removeChild(element);
+function removeAllWithClass(className) {
+	for (var _i = 0, _a = $("." + className); _i < _a.length; _i++) {
+		var element = _a[_i];
+		element.parentNode.removeChild(element);
+	}
+}
+
+//element.parentNode.removeChild(element);
+function removeAllBySelector(selector) {
+	for (var _i = 0, _a = $(selector); _i < _a.length; _i++) {
+		var element = _a[_i];
+		element.parentNode.removeChild(element);
+	}
+}
+
+function $(selector) {
+	return document.querySelectorAll(selector);
+}
+
+function $id(id) {
+	return document.getElementById(id);
+}
+
+//#################################
+//   ###########################  
+//      #####################  
+//         ###############  
+//            #########  
+//               ###
+//#################################
+//########                #########
+//########    PATTERNS    #########
+//########                #########
+//#################################
+
+var patterns = [ 
+// "Equal breathing" -- 1 cycle = 10 seconds. ratios within cycle: equal in then out. 
+//		pattern: in-out
+//		recommended rate: 6 per minute
+//		recommended total: 10 minutes.
+	{ name: "equal",
+		rpm: 6, //per minute
+		total: 10, //minutes
+		ticks: [4,4],//,4,4],
+		names: ["in","out"]
+	},
+// "4-7-8"
+//		pattern: in for 4, hold for 7, out for 8.
+//		recommended rate: 3 per minute
+	{ name: "4-7-8",
+		rpm: 3, //per minute
+		//total: 10, //minutes -- 5,10,20 minutes
+		ticks: [4,7,8],
+		names: ["in","out","hold"]
+	},
+// "7-11"
+//		pattern: in for 7, out for 11.
+//		recommended rate: 3 per minute
+	{ name: "7-11 breathing technique",
+		rpm: 3, //per minute
+		//total: 10, //minutes -- 5,10,20 minutes
+		ticks: [7,11],
+		names: ["in","out"]
+	},
+// "Box breathing, commando or marine breathing" 
+//		pattern: long, slow inhale, followed by a quick, powerful exhale
+//		recommended rate: 30 to 60 per minute. one inhale-exhale (all through the nose) every one to two seconds -- 30 to 60 per minute.
+//		recommended total: 10 cycles.
+	{ name: "navy seal box breathing",
+		rpm: 12, //per minute
+		total: 10, //minutes
+		ticks: [4,4,4,4],
+		names: ["in","hold","out","hold"]
+	},
+// "Kapalabhati or 'Skull Shining Breath'" 
+//		pattern: long, slow inhale, followed by a quick, powerful exhale
+//		recommended rate: 30 to 60 per minute. one inhale-exhale (all through the nose) every one to two seconds -- 30 to 60 per minute.
+//		recommended total: 10 cycles.
+	{ name: "🍃💀🍃Kapalabhati",
+		rpm: 40, //per minute
+		total: 1, //minutes
+		ticks: [8,2],
+		names: ["quite fast inhale","exhale burst!"]
+	}];
+
+//#################################
+//   ###########################  
+//      #####################  
+//         ###############  
+//            #########  
+//               ###
+//#################################
+//########                #########
+//########    S T A R T   #########
+//########                #########
+//#################################
+               start();
+//#################################
+//#################################
+//#################################
+//#################################
+//#################################
+//               ###
+//            #########  
+//         ###############  
+//      #####################  
+//   ###########################  
+//#################################
+
+</script>
+</html>
