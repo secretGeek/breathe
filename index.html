@@ -69,11 +69,15 @@ button {
    -webkit-appearance: none;
    -moz-appearance:    none;
    appearance:         none;
+   border-style:solid;
+   border: 2px solid var(--button-outline);
+   color: var(--button-outline);
    background-color:var(--button1-bg);
    transition: background-color 1s ease, background-image 1s ease, color 1s ease;
 }
 button:hover, button:active, button:focus {
 	background-color:var(--button-selected-bg);
+	color:#222;
 }
 
 h2 {
