@@ -6,23 +6,24 @@
 </head>
 <body>
 <style>
-	:root {
-            --main: hsla(164, 10%, 50%, 0.5);
-            --main-bg: hsla(152, 100%, 21%, 1);
-			--button-outline: hsla(0, 0%, 91%, 1);
-			--button0-bg:hsla(164, 98%, 21%,1);
-			--button1-bg:hsla(164, 98%, 19%,1);
-			--button2-bg:hsla(164, 98%, 17%,1);
-			--button3-bg:hsla(164, 98%, 15%,1);
-			--bar0-bg:hsla(164, 98%, 26%,1);
-			--bar1-bg:hsla(164, 98%, 24%,1);
-			--bar2-bg:hsla(164, 98%, 22%,1);
-			--bar3-bg:hsla(164, 98%, 20%,1);
-			--button-selected-bg:hsla(120, 17%, 86%,1);
-			--main-selected: hsla(164, 10%, 20%, 0.5);
-			--main-selected-shadow: hsla(164, 30%, 40%, 0.5);
-        }
+:root {
+	--main: hsla(164, 10%, 50%, 0.5);
+	--main-bg: hsla(152, 100%, 21%, 1);
+	--button-outline: hsla(0, 0%, 91%, 1);
+	--button0-bg:hsla(164, 98%, 21%,1);
+	--button1-bg:hsla(164, 98%, 19%,1);
+	--button2-bg:hsla(164, 98%, 17%,1);
+	--button3-bg:hsla(164, 98%, 15%,1);
+	--bar0-bg:hsla(164, 98%, 26%,1);
+	--bar1-bg:hsla(164, 98%, 24%,1);
+	--bar2-bg:hsla(164, 98%, 22%,1);
+	--bar3-bg:hsla(164, 98%, 20%,1);
+	--button-selected-bg:hsla(120, 17%, 86%,1);
+	--main-selected: hsla(164, 10%, 20%, 0.5);
+	--main-selected-shadow: hsla(164, 30%, 40%, 0.5);
+}
 body {
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	max-width:100%;
 	padding:2ch;
 	color:var(--main);
@@ -65,7 +66,7 @@ button.selected {
 }
 
 button {
-	-webkit-appearance: none;
+   -webkit-appearance: none;
    -moz-appearance:    none;
    appearance:         none;
    background-color:var(--button1-bg);
@@ -77,10 +78,10 @@ button:hover, button:active, button:focus {
 
 h2 {
 	transition: background-color 1s ease, background-image 1s ease, color 1s ease;
-	text-shadow:0 -2px 1px var(--button-selected-bg);
+	xtext-shadow:0 -2px 1px var(--button-selected-bg);
 }
 h2.selected {
-	text-shadow:0 -1px 1px var(--main-selected-shadow);
+	xtext-shadow:0 -1px 1px var(--main-selected-shadow);
 }
 #step0 {	background-color:var(--button0-bg);}
 #step1 {	background-color:var(--button1-bg);}
@@ -92,25 +93,25 @@ x#step0.selected {
 	xbackground-image: linear-gradient(-90deg, hsla(30, 84%, 71%, 0.5) 0%, hsla(10, 100%, 50%, 0.5) 47%, hsla(0, 71%, 51%, 0.5) 100%);
 	opacity:0.8;
 	xcolor:hsla(10, 100%, 30%, 0.5);
-	text-shadow:0 2px 2px hsla(10, 100%, 20%, 0.8);
+	xtext-shadow:0 2px 2px hsla(10, 100%, 20%, 0.8);
 }
 x#step1.selected {
 	xbackground-image: linear-gradient(-90deg, hsla(50, 84%, 71%, 0.5) 0%, hsla(20, 100%, 50%, 0.5) 47%, hsla(10, 71%, 51%, 0.5) 100%);
 	opacity:0.8;
 	xcolor:hsla(20, 100%, 35%, 0.5);
-	text-shadow:0 2px 2px hsla(30, 87%, 20%, 0.8);
+	xtext-shadow:0 2px 2px hsla(30, 87%, 20%, 0.8);
 }
 x#step2.selected {
 	xbackground-image: linear-gradient(-90deg, hsla(70, 84%, 71%, 0.5) 0%, hsla(30, 100%, 50%, 0.5) 47%, hsla(18, 71%, 51%, 0.5) 100%);
 	opacity:0.8;
 	xcolor:hsla(40, 100%, 35%, 0.5);
-	text-shadow:0 2px 2px hsla(40, 87%, 20%, 0.8);
+	xtext-shadow:0 2px 2px hsla(40, 87%, 20%, 0.8);
 }
 x#step3.selected {
 	xbackground-image: linear-gradient(-90deg, hsla(120, 100%, 39%, 0.5) 0%, hsla(90, 100%, 39%, 0.5) 47%, hsla(40, 100%, 39%, 0.5) 100%);
 	opacity:0.8;
 	xcolor:hsla(90, 100%, 25%, 0.5);
-	text-shadow:0 2px 2px hsla(90, 87%, 16%, 0.8);
+	xtext-shadow:0 2px 2px hsla(90, 87%, 16%, 0.8);
 }
 #step0.selected,#step1.selected,#step2.selected,#step3.selected {
 	background-color:var(--button-selected-bg);
