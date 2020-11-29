@@ -1,5 +1,6 @@
 # TODO
 
+[ ] unwanted scrollbars
 [ ] Speed of navy seal box breathing is NOT even close to correct.
 [ ] ADD james pattern
 [ ] color of pattern select buttons
@@ -8,6 +9,8 @@
 [ ] setup domain
 [ ] ability to add another pattern
 [ ] Dark/light mode
+[ ] sounds played when breathing in and out.
+[ ] grow or shrink (with ease) animations for in or out.
 
 
 Some other patterns:
