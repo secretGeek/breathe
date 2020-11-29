@@ -140,8 +140,9 @@ h2#step3.selected > .progress > .bar {
 
 button.pattern {
 	display:inline; 
-	width:calc(20% - 18px);
+	width:calc(33% - 18px);
 	height:70px;
+	font-size:16pt;
 	vertical-align:top;
 	margin:7px;
 	border-radius:10px;
@@ -479,6 +480,15 @@ var patterns = [
 		rpm: 3.75, //per minute
 		total: 10, //minutes
 		ticks: [4,4,4,4],
+		names: ["in","hold","out","hold"]
+	},
+// "9-7-9-7"
+//		from James Anderson -- this is really hard!
+//		recommended rate: 3 per minute
+{ name: "9-7-9-7",
+		rpm: 2, //per minute
+		//total: 10, //minutes -- 5,10,20 minutes
+		ticks: [9,7,9,7],
 		names: ["in","hold","out","hold"]
 	},
 // "Kapalabhati or 'Skull Shining Breath'" 
