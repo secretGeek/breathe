@@ -15,20 +15,21 @@
 		text-align:center;
 	}
 :root {
-	--main: hsla(164, 10%, 50%, 0.5);
-	--main-bg: hsla(152, 100%, 21%, 1);
+  --hue: 164;
+	--main: hsla(var(--hue), 10%, 50%, 0.5);
+	--main-bg: hsla(calc(var(--hue)*0.9), 100%, 21%, 1);
 	--button-outline: hsla(0, 0%, 91%, 1);
-	--button0-bg:hsla(164, 98%, 21%,1);
-	--button1-bg:hsla(164, 98%, 19%,1);
-	--button2-bg:hsla(164, 98%, 17%,1);
-	--button3-bg:hsla(164, 98%, 15%,1);
-	--bar0-bg:hsla(164, 98%, 26%,1);
-	--bar1-bg:hsla(164, 98%, 24%,1);
-	--bar2-bg:hsla(164, 98%, 22%,1);
-	--bar3-bg:hsla(164, 98%, 20%,1);
-	--button-selected-bg:hsla(120, 17%, 86%,1);
-	--main-selected: hsla(164, 10%, 20%, 0.5);
-	--main-selected-shadow: hsla(164, 30%, 40%, 0.5);
+	--button0-bg:hsla(var(--hue), 98%, 21%,1);
+	--button1-bg:hsla(var(--hue), 98%, 19%,1);
+	--button2-bg:hsla(var(--hue), 98%, 17%,1);
+	--button3-bg:hsla(var(--hue), 98%, 15%,1);
+	--bar0-bg:hsla(var(--hue), 98%, 26%,1);
+	--bar1-bg:hsla(var(--hue), 98%, 24%,1);
+	--bar2-bg:hsla(var(--hue), 98%, 22%,1);
+	--bar3-bg:hsla(var(--hue), 98%, 20%,1);
+	--button-selected-bg:hsla(var(--hue), 17%, 86%,1);
+	--main-selected: hsla(var(--hue), 10%, 20%, 0.5);
+	--main-selected-shadow: hsla(var(--hue), 30%, 40%, 0.5);
 }
 body {
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
@@ -37,6 +38,7 @@ body {
 	color:var(--main);
 	font-size:1.2em;
 	background-color: var(--main-bg);
+	--hue:200;
 }
 
 html, body {
@@ -150,7 +152,8 @@ h2.selected > .progress {
 	to { width: 100%; }
 }
 </style>
-<h2 style="padding-top:0;padding-bottom:-10pt"><span style="font-size:66%;" id='pattern-name'>pattern</span></h2>
+
+<h2 style="padding-top:0;padding-bottom:-10pt;line-height:57%"><span style="font-size:66%;" id='pattern-name'>pattern</span></h2>
 
 <div id='steps'>
 
@@ -231,6 +234,8 @@ h2.selected > .progress {
 //var slowness = 3;
 
 var currentPattern;
+var root = document.documentElement;
+var huey = 164;
 
 function setPattern(o, pattern) {
   removeClass(".pattern.selected", "selected");
@@ -286,6 +291,11 @@ function switchTo(o, index) {
 var nextTimeOut = "z";
 
 function showAndContinue(a) {
+
+	root.style.setProperty('--hue', huey);
+	huey += 5;
+	if (huey>=360) huey = 0;
+
 	removeClass('h2', 'selected');
 	if (a >= currentPattern.ticks.length) {
 		a = 0;
@@ -469,6 +479,16 @@ var patterns = [
 		ticks: [8,2],
 		names: ["quite fast inhale","exhale burst!"]
 	}];
+
+// 4-6-8-4 calm box "https://mractivated.com/special-breathing-patterns/"
+// 4-2-8-2 fear "https://mractivated.com/special-breathing-patterns/"
+// 2-3-5  (in-hold-out)  out through pursed lips
+// 2-2    (in-out) create energy
+// 2-8    (in-out) find your centre amid chaos
+
+// progressive body relaxation... think over each part of your body
+
+// note: https://pzizz.com/blog/meditation-breathing/ "Hypnotic visuals that 'breathe' in time with breathing patterns clinically-proven to promote relaxation"
 
 //#################################
 //   ###########################  
