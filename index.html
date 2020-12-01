@@ -175,9 +175,9 @@ h2.selected > .progress {
 <h2 style="padding-top:1%;padding-bottom:-10pt"><span style="font-size:66%;">patterns</span></h2>
 <div class='button-bar patterns'></div>
 
-<p><a href='https://wiki.secretgeek.net/protective-factors-for-mental-health' target="_blank">Read about Protective Factors for Mental Health</a><br />
-	<a href='http://github.com/secretGeek/breathe/' target="_blank">Source Code</a>
-
+<p id="footer">
+	<a href='https://wiki.secretgeek.net/protective-factors-for-mental-health' target="_blank">Read about Protective Factors for Mental Health</a><br />
+	<a href='http://github.com/secretGeek/breathe/' target="_blank">Source Code</a><br />
 </p>
 
 </body>
@@ -303,6 +303,19 @@ function showAndContinue(a) {
 
 	addClass('#step' + a, 'selected');
 	var totalInterval = (currentPattern.durations[a]); // in seconds.
+	
+	// Kapalabhati has too much text to fit into the intervals
+	if (
+		window.speechSynthesis && 
+		window.localStorage && 
+		window.localStorage.getItem("soundEnabled") === "true" &&
+		currentPattern.name !== "Kapalabhati"
+	) {
+		var msg = new SpeechSynthesisUtterance();
+		msg.rate = 0.7;
+		msg.text = $("h2.step-card.selected")[0].textContent;
+		window.speechSynthesis.speak(msg);
+	}
 
 	// select the relevant bar...
 	var elem = document.getElementById("bar" + a);
@@ -326,12 +339,34 @@ function showPatternButtons(patterns) {
 	}
 }
 
+function configureSoundControls() { 
+	if (typeof(Storage) !== "undefined") {
+		// Code for localStorage/sessionStorage.
+		// add control to page, set default
+		window.localStorage.setItem("soundEnabled", "false")
+		var footerLinks = $id("footer")
+		console.log(footerLinks)
+		var volumeHtml = "<a href='javascript:void(0)'' id='volumeControl' onclick='toggleSound();' class='cats'>Turn on volume</a>";
+		addChild(footerLinks, volumeHtml); 
+	} else {
+		// No Web Storage support
+	}
+}
+
+function toggleSound() { 
+	var current = localStorage.getItem("soundEnabled") === "true"
+	window.localStorage.setItem("soundEnabled", !current)
+	$id('volumeControl').innerHTML = current ? 'Turn on volume' : 'Turn off volume'
+	// change the icon
+}
+
 function start() {
 	a=0;
 	showPatternButtons(patterns);
 	
 	setPattern($('button[title="balance"]')[0], "balance");
 	showAndContinue(0);
+	configureSoundControls();
 }
 
 //#################################
@@ -408,6 +443,14 @@ function $(selector) {
 function $id(id) {
 	return document.getElementById(id);
 }
+
+// function setSoundEnabled(isEnabled) { 
+// 	if (typeof(Storage) !== "undefined") {
+//   // Code for localStorage/sessionStorage.
+// 	} else {
+// 		// Sorry! No Web Storage support..
+// 	}
+// }
 
 //#################################
 //   ###########################  
