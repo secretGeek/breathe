@@ -304,12 +304,11 @@ function showAndContinue(a) {
 	addClass('#step' + a, 'selected');
 	var totalInterval = (currentPattern.durations[a]); // in seconds.
 	
-	// Kapalabhati has too much text to fit into the intervals
 	if (
 		window.speechSynthesis && 
 		window.localStorage && 
 		window.localStorage.getItem("soundEnabled") === "true" &&
-		currentPattern.name !== "Kapalabhati"
+		currentPattern.name !== "Kapalabhati" // Kapalabhati has too much text to fit into the intervals
 	) {
 		var msg = new SpeechSynthesisUtterance();
 		msg.rate = 0.7;
