@@ -341,23 +341,17 @@ function showPatternButtons(patterns) {
 
 function configureSoundControls() { 
 	if (typeof(Storage) !== "undefined") {
-		// Code for localStorage/sessionStorage.
-		// add control to page, set default
+		// add control to page, off by default
 		window.localStorage.setItem("soundEnabled", "false")
-		var footerLinks = $id("footer")
-		console.log(footerLinks)
-		var volumeHtml = "<a href='javascript:void(0)'' id='volumeControl' onclick='toggleSound();' class='cats'>Turn on volume</a>";
-		addChild(footerLinks, volumeHtml); 
-	} else {
-		// No Web Storage support
+		var volumeHtml = "<a href='javascript:void(0)'' id='volumeControl' onclick='toggleSound();' class='cats'>Unmute audio</a>";
+		addChild($id("footer"), volumeHtml); 
 	}
 }
 
 function toggleSound() { 
 	var current = localStorage.getItem("soundEnabled") === "true"
 	window.localStorage.setItem("soundEnabled", !current)
-	$id('volumeControl').innerHTML = current ? 'Turn on volume' : 'Turn off volume'
-	// change the icon
+	$id('volumeControl').innerHTML = current ? 'Unmute audio' : 'Mute audio'
 }
 
 function start() {
@@ -443,14 +437,6 @@ function $(selector) {
 function $id(id) {
 	return document.getElementById(id);
 }
-
-// function setSoundEnabled(isEnabled) { 
-// 	if (typeof(Storage) !== "undefined") {
-//   // Code for localStorage/sessionStorage.
-// 	} else {
-// 		// Sorry! No Web Storage support..
-// 	}
-// }
 
 //#################################
 //   ###########################  
