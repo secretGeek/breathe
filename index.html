@@ -17,7 +17,8 @@
 :root {
   --hue: 164;
 	--main: hsla(var(--hue), 10%, 50%, 0.5);
-	--main-bg: hsla(calc(var(--hue)*0.9), 100%, 21%, 1);
+	/*--main-bg: hsla(calc(var(--hue)*0.9), 100%, 21%, 1);*/
+	--main-bg: hsla(var(--hue), 100%, 13%, 1);
 	--button-outline: hsla(0, 0%, 91%, 1);
 	--button0-bg:hsla(var(--hue), 98%, 21%,1);
 	--button1-bg:hsla(var(--hue), 98%, 19%,1);
@@ -39,6 +40,10 @@ body {
 	font-size:1.2em;
 	background-color: var(--main-bg);
 	--hue:200;
+}
+
+.hidden {
+  visibility:none;
 }
 
 html, body {
@@ -178,6 +183,8 @@ h2.selected > .progress {
 <p id="footer">
 	<a href='https://wiki.secretgeek.net/protective-factors-for-mental-health' target="_blank">Read about Protective Factors for Mental Health</a><br />
 	<a href='http://github.com/secretGeek/breathe/' target="_blank">Source Code</a><br />
+	<a href='javascript:void(0);' id='volumeControl' onclick='toggleSound();' class='hidden'>Unmute audio</a>
+	<p>&nbsp;</p>
 </p>
 
 </body>
@@ -238,7 +245,7 @@ var root = document.documentElement;
 var huey = 164;
 
 function setPattern(o, pattern) {
-  removeClass(".pattern.selected", "selected");
+	removeClass(".pattern.selected", "selected");
 	
   for(var p of patterns) {
 	  if (p.name === pattern) {
@@ -293,7 +300,7 @@ var nextTimeOut = "z";
 function showAndContinue(a) {
 
 	root.style.setProperty('--hue', huey);
-	huey += 5;
+	huey += 2;
 	if (huey>=360) huey = 0;
 
 	removeClass('h2', 'selected');
@@ -303,15 +310,15 @@ function showAndContinue(a) {
 
 	addClass('#step' + a, 'selected');
 	var totalInterval = (currentPattern.durations[a]); // in seconds.
-	
+
 	if (
 		window.speechSynthesis && 
 		window.localStorage && 
 		window.localStorage.getItem("soundEnabled") === "true" &&
-		currentPattern.name !== "Kapalabhati" // Kapalabhati has too much text to fit into the intervals
+		currentPattern.name !== "Kapalabhati" //too fast!
 	) {
 		var msg = new SpeechSynthesisUtterance();
-		msg.rate = 0.7;
+		msg.rate = 0.6;
 		msg.text = $("h2.step-card.selected")[0].textContent;
 		window.speechSynthesis.speak(msg);
 	}
@@ -323,6 +330,7 @@ function showAndContinue(a) {
 	if (nextTimeOut != 'z') {
 		clearTimeout(nextTimeOut);
 	}
+
 	nextTimeOut = setTimeout(function(){ showAndContinue(a+1) }, totalInterval*1000); // in milliseconds
 }
 
@@ -342,37 +350,39 @@ function configureSoundControls() {
 	if (typeof(Storage) !== "undefined") {
 		// add control to page, off by default
 		window.localStorage.setItem("soundEnabled", "false")
-		var volumeHtml = "<a href='javascript:void(0)'' id='volumeControl' onclick='toggleSound();' class='cats'>Unmute audio</a>";
-		addChild($id("footer"), volumeHtml); 
+		removeClass('#volumeControl', 'hidden');
+	} else {
+		addClass('#volumeControl', 'hidden');
 	}
 }
 
 function toggleSound() { 
-	var current = localStorage.getItem("soundEnabled") === "true"
-	window.localStorage.setItem("soundEnabled", !current)
-	$id('volumeControl').innerHTML = current ? 'Unmute audio' : 'Mute audio'
+	var current = localStorage.getItem("soundEnabled") === "true";
+	window.localStorage.setItem("soundEnabled", !current);
+	$id('volumeControl').innerHTML = current ? 'Unmute audio' : 'Mute audio';
 }
 
 function start() {
 	a=0;
 	showPatternButtons(patterns);
-	
+	configureSoundControls();
+
 	setPattern($('button[title="balance"]')[0], "balance");
 	showAndContinue(0);
-	configureSoundControls();
+
 }
 
-//#################################
-//   ###########################  
-//      #####################  
-//         ###############  
-//            #########  
-//               ###
-//#################################
-//########  utility       #########
-//########     functions  #########
-//########(good ones too!)#########
-//#################################
+// #################################
+//    ###########################  
+//       #####################  
+//          ###############  
+//             #########  
+//                ###
+// #################################
+// ########     utility     ########
+// ########    functions    ########
+// ########(good ones too!)#########
+// #################################
 
 function addChild(parent, html) {
     parent.appendChild(htmlToElement(html));
@@ -437,17 +447,17 @@ function $id(id) {
 	return document.getElementById(id);
 }
 
-//#################################
-//   ###########################  
-//      #####################  
-//         ###############  
-//            #########  
-//               ###
-//#################################
-//########                #########
-//########    PATTERNS    #########
-//########                #########
-//#################################
+// #################################
+//    ###########################  
+//       #####################  
+//          ###############  
+//             #########  
+//                ###
+// #################################
+// ########                #########
+// ########    PATTERNS    #########
+// ########                #########
+// #################################
 
 var patterns = [ 
 // "Equal breathing" -- 1 cycle = 10 seconds. ratios within cycle: equal in then out. 
@@ -505,7 +515,7 @@ var patterns = [
 		rpm: 40, //per minute
 		total: 1, //minutes
 		ticks: [8,2],
-		names: ["quite fast inhale","exhale burst!"]
+		names: ["solid inhale","fast out!"]
 	}];
 
 // 4-6-8-4 calm box "https://mractivated.com/special-breathing-patterns/"
@@ -518,29 +528,29 @@ var patterns = [
 
 // note: https://pzizz.com/blog/meditation-breathing/ "Hypnotic visuals that 'breathe' in time with breathing patterns clinically-proven to promote relaxation"
 
-//#################################
-//   ###########################  
-//      #####################  
-//         ###############  
-//            #########  
-//               ###
-//#################################
-//########                #########
-//########    S T A R T   #########
-//########                #########
-//#################################
-               start();
-//#################################
-//#################################
-//#################################
-//#################################
-//#################################
-//               ###
-//            #########  
-//         ###############  
-//      #####################  
-//   ###########################  
-//#################################
+// #################################
+//    ###########################  
+//       #####################  
+//          ###############  
+//             #########  
+//                ###
+// #################################
+// ########                #########
+// ########    S T A R T   #########
+// ########                #########
+// #################################
+                start();
+// #################################
+// #################################
+// #################################
+// #################################
+// #################################
+//                ###
+//             #########  
+//          ###############  
+//       #####################  
+//    ###########################  
+// #################################
 
 </script>
 </html>
