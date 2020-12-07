@@ -245,7 +245,7 @@ var root = document.documentElement;
 var huey = 164;
 
 function setPattern(o, pattern) {
-	removeClass(".pattern.selected", "selected");
+  removeClass(".pattern.selected", "selected");
 	
   for(var p of patterns) {
 	  if (p.name === pattern) {
@@ -300,7 +300,7 @@ var nextTimeOut = "z";
 function showAndContinue(a) {
 
 	root.style.setProperty('--hue', huey);
-	huey += 2;
+	//huey += 2;
 	if (huey>=360) huey = 0;
 
 	removeClass('h2', 'selected');
